@@ -1,398 +1,97 @@
-"use client";
+import Link from "next/link";
+import { products } from "@/data/products";
+import { ProductCard } from "@/components/ProductCard";
+import { Button } from "@/components/ui/button";
+import { Sparkles, ShoppingCart, LogIn, UserPlus } from "lucide-react";
 
-import React, { useState } from "react";
-
-export default function LoginPage() {
-  const [identity, setIdentity] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
-  const [status, setStatus] = useState<"idle" | "loading" | "success">("idle");
-  const [lastSubmitted, setLastSubmitted] = useState<string | null>(null);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!identity.trim() || !password.trim()) return;
-
-    setStatus("loading");
-    // Simulate UI feedback without backend authentication
-    setTimeout(() => {
-      setStatus("success");
-      setLastSubmitted(identity);
-    }, 900);
-  };
-
-  const handleFillDemo = (user: string, pass: string) => {
-    setIdentity(user);
-    setPassword(pass);
-    setStatus("idle");
-  };
-
-  const resetStatus = () => {
-    setStatus("idle");
-    setLastSubmitted(null);
-  };
-
+export default function HomePage() {
   return (
-    <main className="ambient-scene">
-      <div className="glow-orb glow-orb-1" aria-hidden="true" />
-      <div className="glow-orb glow-orb-2" aria-hidden="true" />
-
-      <div className="login-wrapper">
-        <section className="glass-card" aria-labelledby="login-heading">
-          {/* Header */}
-          <header className="card-header">
-            <div className="logo-badge" aria-hidden="true">
-              <svg
-                width="28"
-                height="28"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="url(#auraGrad)"
-                strokeWidth="2.2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <defs>
-                  <linearGradient id="auraGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#818cf8" />
-                    <stop offset="100%" stopColor="#ec4899" />
-                  </linearGradient>
-                </defs>
-                <path d="M12 2L2 7l10 5 10-5-10-5z" />
-                <path d="M2 17l10 5 10-5" />
-                <path d="M2 12l10 5 10-5" />
-              </svg>
-            </div>
-            <h1 id="login-heading" className="card-title">
-              Welcome back
-            </h1>
-            <p className="card-subtitle">
-              Sign in to your account to continue
-            </p>
-            <div className="ui-badge">
-              <span className="ui-badge-dot" />
-              UI Preview Mode
-            </div>
-          </header>
-
-          {/* Quick-fill Demo Helpers */}
-          <div className="quick-fill-section">
-            <span className="quick-fill-label">Quick fill demo credentials:</span>
-            <div className="chip-container">
-              <button
-                type="button"
-                className="demo-chip"
-                onClick={() => handleFillDemo("alex.chen@enterprise.io", "DemoPass2026!")}
-              >
-                👤 alex.chen@enterprise.io
-              </button>
-              <button
-                type="button"
-                className="demo-chip"
-                onClick={() => handleFillDemo("admin_super", "SuperSecureKey#9")}
-              >
-                ⚡ admin_super
-              </button>
-            </div>
-          </div>
-
-          {/* Login Form */}
-          <form
-            id="login-form"
-            className="login-form"
-            onSubmit={handleSubmit}
-            noValidate={false}
-          >
-            {/* Identity Field (Email or Username) */}
-            <div className="form-group">
-              <label htmlFor="login-identity" className="form-label">
-                Email or Username
-              </label>
-              <div className="input-container">
-                <input
-                  id="login-identity"
-                  name="identity"
-                  type="text"
-                  required
-                  autoComplete="username"
-                  value={identity}
-                  onChange={(e) => {
-                    setIdentity(e.target.value);
-                    if (status === "success") setStatus("idle");
-                  }}
-                  placeholder="name@domain.com or username"
-                  className="form-input"
-                />
-                <span className="input-icon" aria-hidden="true">
-                  <svg
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                    <circle cx="12" cy="7" r="4" />
-                  </svg>
-                </span>
+    <div className="ambient-bg min-h-screen flex flex-col justify-between">
+      {/* Header */}
+      <header className="sticky top-0 z-50 w-full border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-xl">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+          {/* Brand Logo */}
+          <Link href="/" className="flex items-center gap-2.5 group">
+            <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-pink-500 p-0.5 flex items-center justify-center shadow-lg shadow-indigo-500/20 group-hover:shadow-indigo-500/40 transition-all">
+              <div className="h-full w-full bg-slate-950 rounded-[10px] flex items-center justify-center">
+                <Sparkles className="h-4 w-4 text-indigo-400 group-hover:rotate-12 transition-transform" />
               </div>
             </div>
-
-            {/* Password Field */}
-            <div className="form-group">
-              <div className="form-label-row">
-                <label htmlFor="login-password" className="form-label">
-                  Password
-                </label>
-                <a
-                  href="#forgot-password"
-                  className="forgot-link"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    alert("Password reset instructions are a UI placeholder in this demo.");
-                  }}
-                >
-                  Forgot password?
-                </a>
-              </div>
-              <div className="input-container">
-                <input
-                  id="login-password"
-                  name="password"
-                  type={showPassword ? "text" : "password"}
-                  required
-                  autoComplete="current-password"
-                  value={password}
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                    if (status === "success") setStatus("idle");
-                  }}
-                  placeholder="Enter your password"
-                  className="form-input password-input"
-                />
-                <span className="input-icon" aria-hidden="true">
-                  <svg
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                  </svg>
-                </span>
-                <button
-                  type="button"
-                  id="toggle-password-btn"
-                  className="toggle-password-btn"
-                  onClick={() => setShowPassword(!showPassword)}
-                  aria-label={showPassword ? "Hide password" : "Show password"}
-                  title={showPassword ? "Hide password" : "Show password"}
-                >
-                  {showPassword ? (
-                    <svg
-                      width="18"
-                      height="18"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
-                      <line x1="1" y1="1" x2="23" y2="23" />
-                    </svg>
-                  ) : (
-                    <svg
-                      width="18"
-                      height="18"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                      <circle cx="12" cy="12" r="3" />
-                    </svg>
-                  )}
-                </button>
-              </div>
+            <div className="flex flex-col">
+              <span className="font-extrabold text-lg tracking-tight bg-gradient-to-r from-white via-slate-200 to-indigo-300 bg-clip-text text-transparent">
+                TechPulse
+              </span>
+              <span className="text-[10px] text-slate-400 -mt-1 font-medium tracking-wide">
+                Premium Store
+              </span>
             </div>
+          </Link>
 
-            {/* Remember Me */}
-            <div className="form-options">
-              <label className="remember-label" htmlFor="remember-checkbox">
-                <input
-                  id="remember-checkbox"
-                  type="checkbox"
-                  className="custom-checkbox"
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
-                />
-                <span>Remember this device</span>
-              </label>
-            </div>
-
-            {/* Login Button */}
-            <button
-              id="login-submit-btn"
-              type="submit"
-              disabled={status === "loading"}
-              className="submit-btn"
+          {/* Navigation Actions */}
+          <div className="flex items-center gap-3">
+            <Button
+              asChild
+              variant="ghost"
+              className="text-slate-300 hover:text-white hover:bg-slate-800/60 font-medium text-sm transition-all"
             >
-              {status === "loading" ? (
-                <>
-                  <span className="spinner" aria-hidden="true" />
-                  <span>Signing in...</span>
-                </>
-              ) : (
-                <>
-                  <span>Sign In</span>
-                  <svg
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <line x1="5" y1="12" x2="19" y2="12" />
-                    <polyline points="12 5 19 12 12 19" />
-                  </svg>
-                </>
-              )}
-            </button>
-          </form>
+              <Link href="/login" data-testid="btn-login" className="flex items-center gap-2">
+                <LogIn className="h-4 w-4" />
+                <span>Login</span>
+              </Link>
+            </Button>
 
-          {/* Feedback / Success Notification */}
-          {status === "success" && (
-            <div className="feedback-banner success" role="status" aria-live="polite">
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                style={{ flexShrink: 0, marginTop: "2px" }}
-              >
-                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-                <polyline points="22 4 12 14.01 9 11.01" />
-              </svg>
-              <div>
-                <p className="feedback-title">Login Verified (UI Demo)</p>
-                <p className="feedback-desc">
-                  Authenticated session ready for <strong>{lastSubmitted}</strong>. Credentials are valid for this preview.
-                </p>
-              </div>
-              <button
-                type="button"
-                className="feedback-close"
-                onClick={resetStatus}
-                aria-label="Dismiss banner"
-              >
-                ✕
-              </button>
-            </div>
-          )}
-
-          {/* Divider */}
-          <div className="divider-row" aria-hidden="true">
-            <span className="divider-line" />
-            <span>or sign in with</span>
-            <span className="divider-line" />
-          </div>
-
-          {/* Social Buttons */}
-          <div className="social-grid">
-            <button
-              type="button"
-              className="social-btn"
-              onClick={() => alert("GitHub sign-in is a UI mock.")}
+            <Button
+              asChild
+              className="bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-sm shadow-md shadow-indigo-600/25 transition-all"
             >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
-              </svg>
-              <span>GitHub</span>
-            </button>
-
-            <button
-              type="button"
-              className="social-btn"
-              onClick={() => alert("Google sign-in is a UI mock.")}
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24">
-                <path
-                  fill="#EA4335"
-                  d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.8 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.4l3.7 2.9C6.2 7.4 8.9 5 12 5z"
-                />
-                <path
-                  fill="#4285F4"
-                  d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.6h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.9z"
-                />
-                <path
-                  fill="#FBBC05"
-                  d="M5.3 14.7c-.2-.7-.4-1.5-.4-2.4 0-.9.2-1.7.4-2.4L1.6 7c-.8 1.6-1.3 3.4-1.3 5s.5 3.4 1.3 5l3.7-2.9z"
-                />
-                <path
-                  fill="#34A853"
-                  d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.4-6.7-5.3L1.6 16c1.9 3.8 5.8 6.4 10.4 6.4z"
-                />
-              </svg>
-              <span>Google</span>
-            </button>
+              <Link href="/register" data-testid="btn-register" className="flex items-center gap-2">
+                <UserPlus className="h-4 w-4" />
+                <span>Register</span>
+              </Link>
+            </Button>
           </div>
+        </div>
+      </header>
 
-          {/* Footer Note */}
-          <footer className="card-footer">
-            <p>
-              Don&apos;t have an account?{" "}
-              <a
-                href="#signup"
-                onClick={(e) => {
-                  e.preventDefault();
-                  alert("Sign-up flow is a placeholder in this UI demo.");
-                }}
-              >
-                Create one now
-              </a>
-            </p>
-          </footer>
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10 flex-1">
+        {/* Hero Section */}
+        <section className="mb-10 text-center sm:text-left">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-semibold uppercase tracking-wider mb-3">
+            <Sparkles className="h-3.5 w-3.5" />
+            Curated Tech Collection
+          </div>
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white">
+            Discover Exceptional <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">Hardware & Gear</span>
+          </h1>
+          <p className="mt-3 text-sm sm:text-base text-slate-400 max-w-2xl leading-relaxed">
+            Elevate your workspace and lifestyle with top-tier technology, thoughtfully engineered for performance and comfort.
+          </p>
         </section>
 
-        {/* Security badge note */}
-        <aside className="security-note">
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-          </svg>
-          <span>End-to-end 256-bit encrypted demonstration</span>
-        </aside>
-      </div>
-    </main>
+        {/* Product Grid Container */}
+        {/* At 375px: 1 col, no horizontal scrolling. At 1280px (xl): 4 cols (at least 3 columns) */}
+        <div
+          data-testid="product-list"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+        >
+          {products.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+      </main>
+
+      {/* Footer */}
+      <footer className="w-full border-t border-slate-800/80 bg-slate-950/60 py-6 mt-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
+          <p>© 2026 TechPulse Inc. Lab 2 Demonstration. All rights reserved.</p>
+          <div className="flex items-center gap-4">
+            <Link href="/" className="hover:text-slate-200 transition-colors">Products</Link>
+            <Link href="/login" className="hover:text-slate-200 transition-colors">Login</Link>
+            <Link href="/register" className="hover:text-slate-200 transition-colors">Register</Link>
+          </div>
+        </div>
+      </footer>
+    </div>
   );
 }

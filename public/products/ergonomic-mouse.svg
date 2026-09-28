@@ -1,0 +1,23 @@
+<svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="400" rx="24" fill="#0f172a"/>
+  <circle cx="200" cy="200" r="140" fill="url(#mousegrad)" opacity="0.15"/>
+  <defs>
+    <linearGradient id="mousegrad" x1="120" y1="80" x2="280" y2="320" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f59e0b"/>
+      <stop offset="1" stop-color="#ef4444"/>
+    </linearGradient>
+  </defs>
+  <!-- Mouse Silhouette -->
+  <path d="M150 200 C150 130 170 95 200 95 C230 95 250 130 250 200 C250 265 230 305 200 305 C170 305 150 265 150 200 Z" fill="#1e293b" stroke="#334155" stroke-width="4"/>
+  <!-- Split buttons -->
+  <line x1="200" y1="96" x2="200" y2="175" stroke="#334155" stroke-width="3"/>
+  <path d="M155 175 Q200 190 245 175" stroke="#334155" stroke-width="3"/>
+  <!-- Scroll Wheel -->
+  <rect x="193" y="115" width="14" height="34" rx="7" fill="#f59e0b"/>
+  <!-- Thumb Rest Curve -->
+  <path d="M152 170 Q130 215 156 255" fill="#334155" opacity="0.5"/>
+  <circle cx="140" cy="210" r="4" fill="#f59e0b"/>
+  <circle cx="140" cy="225" r="4" fill="#f59e0b"/>
+  <!-- LED Logo Accent -->
+  <circle cx="200" cy="250" r="14" stroke="url(#mousegrad)" stroke-width="3" stroke-dasharray="6 3"/>
+</svg>

@@ -9,17 +9,16 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "AuraPortal — Secure Account Login",
+  title: "TechPulse Store — Premium Gear & Next-Gen Tech",
   description:
-    "Sign in to your AuraPortal account to access high-performance cloud tools, analytics, and infrastructure.",
-  keywords: ["login", "authentication", "dashboard", "portal", "nextjs"],
-  authors: [{ name: "AuraPortal" }],
+    "Explore our curated collection of premium tech gadgets, accessories, and audio gear.",
+  keywords: ["tech", "gadgets", "audio", "store", "nextjs", "shadcn"],
 };
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#090d16",
+  themeColor: "#060911",
 };
 
 export default function RootLayout({
@@ -29,7 +28,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={inter.variable}>
-      <body>{children}</body>
+      <body className="min-h-screen bg-[#060911] text-slate-100 antialiased overflow-x-hidden">
+        {children}
+      </body>
     </html>
   );
 }

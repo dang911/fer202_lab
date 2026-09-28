@@ -1,0 +1,45 @@
+<svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="400" rx="24" fill="#0f172a"/>
+  <circle cx="200" cy="200" r="140" fill="url(#kbgrad)" opacity="0.15"/>
+  <defs>
+    <linearGradient id="kbgrad" x1="60" y1="120" x2="340" y2="280" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#10b981"/>
+      <stop offset="1" stop-color="#06b6d4"/>
+    </linearGradient>
+  </defs>
+  <!-- Base Case -->
+  <rect x="80" y="130" width="240" height="140" rx="16" fill="#1e293b" stroke="#334155" stroke-width="4"/>
+  <!-- Key rows -->
+  <g fill="#334155">
+    <rect x="95" y="145" width="22" height="18" rx="4"/>
+    <rect x="122" y="145" width="22" height="18" rx="4"/>
+    <rect x="149" y="145" width="22" height="18" rx="4"/>
+    <rect x="176" y="145" width="22" height="18" rx="4"/>
+    <rect x="203" y="145" width="22" height="18" rx="4"/>
+    <rect x="230" y="145" width="22" height="18" rx="4"/>
+    <rect x="257" y="145" width="22" height="18" rx="4"/>
+    <rect x="284" y="145" width="22" height="18" rx="4"/>
+
+    <rect x="95" y="170" width="26" height="18" rx="4" fill="#6366f1"/>
+    <rect x="126" y="170" width="22" height="18" rx="4"/>
+    <rect x="153" y="170" width="22" height="18" rx="4"/>
+    <rect x="180" y="170" width="22" height="18" rx="4" fill="#10b981"/>
+    <rect x="207" y="170" width="22" height="18" rx="4"/>
+    <rect x="234" y="170" width="22" height="18" rx="4"/>
+    <rect x="261" y="170" width="45" height="18" rx="4"/>
+
+    <rect x="95" y="195" width="32" height="18" rx="4"/>
+    <rect x="132" y="195" width="22" height="18" rx="4"/>
+    <rect x="159" y="195" width="22" height="18" rx="4"/>
+    <rect x="186" y="195" width="22" height="18" rx="4"/>
+    <rect x="213" y="195" width="22" height="18" rx="4"/>
+    <rect x="240" y="195" width="22" height="18" rx="4"/>
+    <rect x="267" y="195" width="39" height="18" rx="4" fill="#ec4899"/>
+
+    <rect x="95" y="220" width="36" height="18" rx="4"/>
+    <rect x="136" y="220" width="128" height="18" rx="4" fill="#475569"/>
+    <rect x="269" y="220" width="37" height="18" rx="4"/>
+  </g>
+  <!-- RGB underglow line -->
+  <line x1="88" y1="262" x2="312" y2="262" stroke="url(#kbgrad)" stroke-width="3" stroke-linecap="round"/>
+</svg>
