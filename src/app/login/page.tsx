@@ -1,7 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { AuthContext } from "@/contexts/AuthContext";
 import {
   Card,
   CardHeader,
@@ -13,13 +15,17 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Sparkles, ArrowLeft, CheckCircle2, AlertCircle } from "lucide-react";
+import { Sparkles, ArrowLeft, AlertCircle, Loader2 } from "lucide-react";
 
 export default function LoginPage() {
+  const router = useRouter();
+  const { signIn } = useContext(AuthContext);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
-  const [successMessage, setSuccessMessage] = useState("");
+  const [authError, setAuthError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -43,6 +49,7 @@ export default function LoginPage() {
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setEmail(val);
+    setAuthError("");
     if (errors.email) {
       const err = validateEmail(val);
       setErrors((prev) => {
@@ -60,6 +67,7 @@ export default function LoginPage() {
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setPassword(val);
+    setAuthError("");
     if (errors.password) {
       const err = validatePassword(val);
       setErrors((prev) => {
@@ -74,7 +82,7 @@ export default function LoginPage() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const emailErr = validateEmail(email);
@@ -85,11 +93,25 @@ export default function LoginPage() {
     if (passwordErr) newErrors.password = passwordErr;
 
     setErrors(newErrors);
+    setAuthError("");
 
-    if (!emailErr && !passwordErr) {
-      setSuccessMessage("Login successful (demo)");
-    } else {
-      setSuccessMessage("");
+    if (emailErr || passwordErr) {
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const { error } = await signIn(email, password);
+
+      if (error) {
+        setAuthError(error.message);
+      } else {
+        router.push("/");
+      }
+    } catch (err: any) {
+      setAuthError(err.message || "An unexpected error occurred");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -120,13 +142,13 @@ export default function LoginPage() {
         </CardHeader>
 
         <CardContent>
-          {successMessage && (
+          {authError && (
             <div
-              data-testid="form-success"
-              className="mb-6 flex items-center gap-2.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-3.5 text-sm font-medium text-emerald-400 shadow-sm"
+              data-testid="error-auth"
+              className="mb-6 flex items-center gap-2.5 rounded-lg border border-rose-500/30 bg-rose-500/10 p-3.5 text-sm font-medium text-rose-400 shadow-sm"
             >
-              <CheckCircle2 className="h-5 w-5 shrink-0" />
-              <span>{successMessage}</span>
+              <AlertCircle className="h-5 w-5 shrink-0" />
+              <span>{authError}</span>
             </div>
           )}
 
@@ -190,9 +212,17 @@ export default function LoginPage() {
             <Button
               type="submit"
               data-testid="login-submit"
-              className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2.5 shadow-lg shadow-indigo-600/30 transition-all mt-2"
+              disabled={isSubmitting}
+              className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2.5 shadow-lg shadow-indigo-600/30 transition-all mt-2 flex items-center justify-center gap-2"
             >
-              Sign In
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <span>Signing In...</span>
+                </>
+              ) : (
+                "Sign In"
+              )}
             </Button>
           </form>
         </CardContent>

@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Link from "next/link";
+import { AuthContext } from "@/contexts/AuthContext";
 import {
   Card,
   CardHeader,
@@ -13,9 +14,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { UserPlus, ArrowLeft, CheckCircle2, AlertCircle } from "lucide-react";
+import { UserPlus, ArrowLeft, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
 
 export default function RegisterPage() {
+  const { signUp } = useContext(AuthContext);
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,7 +30,9 @@ export default function RegisterPage() {
     password?: string;
     confirmPassword?: string;
   }>({});
+  const [authError, setAuthError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -71,6 +76,7 @@ export default function RegisterPage() {
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setName(val);
+    setAuthError("");
     if (errors.name) {
       const err = validateName(val);
       setErrors((prev) => {
@@ -85,6 +91,7 @@ export default function RegisterPage() {
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setEmail(val);
+    setAuthError("");
     if (errors.email) {
       const err = validateEmail(val);
       setErrors((prev) => {
@@ -99,6 +106,7 @@ export default function RegisterPage() {
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setPassword(val);
+    setAuthError("");
     if (errors.password) {
       const err = validatePassword(val);
       setErrors((prev) => {
@@ -108,7 +116,6 @@ export default function RegisterPage() {
         return next;
       });
     }
-    // Also revalidate confirm password if it already has an error
     if (errors.confirmPassword) {
       const confirmErr = validateConfirmPassword(confirmPassword, val);
       setErrors((prev) => {
@@ -123,6 +130,7 @@ export default function RegisterPage() {
   const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setConfirmPassword(val);
+    setAuthError("");
     if (errors.confirmPassword) {
       const err = validateConfirmPassword(val, password);
       setErrors((prev) => {
@@ -134,7 +142,7 @@ export default function RegisterPage() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const nameErr = validateName(name);
@@ -155,11 +163,28 @@ export default function RegisterPage() {
     if (confirmPasswordErr) newErrors.confirmPassword = confirmPasswordErr;
 
     setErrors(newErrors);
+    setAuthError("");
+    setSuccessMessage("");
 
-    if (!nameErr && !emailErr && !passwordErr && !confirmPasswordErr) {
-      setSuccessMessage("Registration successful (demo)");
-    } else {
-      setSuccessMessage("");
+    if (nameErr || emailErr || passwordErr || confirmPasswordErr) {
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const { data, error } = await signUp(email, password);
+
+      if (error) {
+        setAuthError(error.message);
+      } else if (data?.user && data.user.identities && data.user.identities.length === 0) {
+        setAuthError("User already registered");
+      } else {
+        setSuccessMessage("Registration successful");
+      }
+    } catch (err: any) {
+      setAuthError(err.message || "An unexpected error occurred");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -190,6 +215,16 @@ export default function RegisterPage() {
         </CardHeader>
 
         <CardContent>
+          {authError && (
+            <div
+              data-testid="error-auth"
+              className="mb-6 flex items-center gap-2.5 rounded-lg border border-rose-500/30 bg-rose-500/10 p-3.5 text-sm font-medium text-rose-400 shadow-sm"
+            >
+              <AlertCircle className="h-5 w-5 shrink-0" />
+              <span>{authError}</span>
+            </div>
+          )}
+
           {successMessage && (
             <div
               data-testid="form-success"
@@ -310,9 +345,17 @@ export default function RegisterPage() {
             <Button
               type="submit"
               data-testid="register-submit"
-              className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2.5 shadow-lg shadow-indigo-600/30 transition-all mt-2"
+              disabled={isSubmitting}
+              className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2.5 shadow-lg shadow-indigo-600/30 transition-all mt-2 flex items-center justify-center gap-2"
             >
-              Create Account
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <span>Creating Account...</span>
+                </>
+              ) : (
+                "Create Account"
+              )}
             </Button>
           </form>
         </CardContent>

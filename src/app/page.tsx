@@ -1,57 +1,14 @@
 import Link from "next/link";
 import { products } from "@/data/products";
 import { ProductCard } from "@/components/ProductCard";
-import { Button } from "@/components/ui/button";
-import { Sparkles, ShoppingCart, LogIn, UserPlus } from "lucide-react";
+import { Header } from "@/components/Header";
+import { Sparkles } from "lucide-react";
 
 export default function HomePage() {
   return (
     <div className="ambient-bg min-h-screen flex flex-col justify-between">
       {/* Header */}
-      <header className="sticky top-0 z-50 w-full border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-xl">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          {/* Brand Logo */}
-          <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-pink-500 p-0.5 flex items-center justify-center shadow-lg shadow-indigo-500/20 group-hover:shadow-indigo-500/40 transition-all">
-              <div className="h-full w-full bg-slate-950 rounded-[10px] flex items-center justify-center">
-                <Sparkles className="h-4 w-4 text-indigo-400 group-hover:rotate-12 transition-transform" />
-              </div>
-            </div>
-            <div className="flex flex-col">
-              <span className="font-extrabold text-lg tracking-tight bg-gradient-to-r from-white via-slate-200 to-indigo-300 bg-clip-text text-transparent">
-                TechPulse
-              </span>
-              <span className="text-[10px] text-slate-400 -mt-1 font-medium tracking-wide">
-                Premium Store
-              </span>
-            </div>
-          </Link>
-
-          {/* Navigation Actions */}
-          <div className="flex items-center gap-3">
-            <Button
-              asChild
-              variant="ghost"
-              className="text-slate-300 hover:text-white hover:bg-slate-800/60 font-medium text-sm transition-all"
-            >
-              <Link href="/login" data-testid="btn-login" className="flex items-center gap-2">
-                <LogIn className="h-4 w-4" />
-                <span>Login</span>
-              </Link>
-            </Button>
-
-            <Button
-              asChild
-              className="bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-sm shadow-md shadow-indigo-600/25 transition-all"
-            >
-              <Link href="/register" data-testid="btn-register" className="flex items-center gap-2">
-                <UserPlus className="h-4 w-4" />
-                <span>Register</span>
-              </Link>
-            </Button>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10 flex-1">
