@@ -3,8 +3,27 @@ import { products } from "@/data/products";
 import { ProductCard } from "@/components/ProductCard";
 import { Header } from "@/components/Header";
 import { Sparkles } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { categories } from "@/data/products";
 
-export default function HomePage() {
+interface HomePageProps {
+  searchParams: { q?: string; category?: string };
+}
+
+export default function HomePage({ searchParams }: HomePageProps) {
+  const query = searchParams.q?.trim() ?? "";
+  const selectedCategory = searchParams.category?.trim() ?? "";
+  const filteredProducts = products.filter((product) => {
+    const matchesQuery =
+      !query ||
+      product.name.toLocaleLowerCase().includes(query.toLocaleLowerCase()) ||
+      product.description.toLocaleLowerCase().includes(query.toLocaleLowerCase());
+    const matchesCategory =
+      !selectedCategory || product.category.toLocaleLowerCase() === selectedCategory.toLocaleLowerCase();
+    return matchesQuery && matchesCategory;
+  });
+
   return (
     <div className="ambient-bg min-h-screen flex flex-col justify-between">
       {/* Header */}
@@ -26,16 +45,40 @@ export default function HomePage() {
           </p>
         </section>
 
+        <form method="get" action="/" className="mb-8 flex flex-col gap-3 sm:flex-row">
+          <Input
+            name="q"
+            data-testid="search-input"
+            defaultValue={query}
+            placeholder="Search products"
+            className="border-slate-700 bg-slate-900/70 text-slate-100 sm:max-w-sm"
+          />
+          <select
+            name="category"
+            data-testid="category-select"
+            defaultValue={selectedCategory}
+            className="h-10 rounded-md border border-slate-700 bg-slate-900 px-3 text-sm text-slate-100"
+          >
+            <option value="">All</option>
+            {categories.map((category) => (
+              <option key={category} value={category}>{category}</option>
+            ))}
+          </select>
+          <Button type="submit" data-testid="btn-search" className="bg-indigo-600 text-white hover:bg-indigo-500">
+            Search
+          </Button>
+        </form>
+
         {/* Product Grid Container */}
         {/* At 375px: 1 col, no horizontal scrolling. At 1280px (xl): 4 cols (at least 3 columns) */}
-        <div
+        {filteredProducts.length > 0 ? <div
           data-testid="product-list"
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
         >
-          {products.map((product) => (
+          {filteredProducts.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
-        </div>
+        </div> : <p data-testid="no-results" className="py-12 text-center text-slate-400">No products found.</p>}
       </main>
 
       {/* Footer */}

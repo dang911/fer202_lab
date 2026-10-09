@@ -5,9 +5,11 @@ import Link from "next/link";
 import { AuthContext } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Sparkles, LogIn, UserPlus, LogOut, User } from "lucide-react";
+import { useFavorites } from "@/contexts/FavoritesContext";
 
 export function Header() {
   const { user, signOut } = useContext(AuthContext);
+  const { favorites } = useFavorites();
 
   const handleLogout = async () => {
     try {
@@ -41,6 +43,13 @@ export function Header() {
         <div className="flex items-center gap-3">
           {user ? (
             <div className="flex items-center gap-3">
+              <Link
+                href="/favorites"
+                data-testid="link-favorites"
+                className="rounded-lg border border-slate-800 bg-slate-900/80 px-3 py-2 text-sm text-slate-200 hover:text-indigo-300"
+              >
+                Favorites (<span data-testid="favorites-count">{favorites.length}</span>)
+              </Link>
               <div className="flex items-center gap-2 bg-slate-900/80 border border-slate-800 py-1.5 px-3 rounded-lg">
                 <User className="h-4 w-4 text-indigo-400 shrink-0" />
                 <Link

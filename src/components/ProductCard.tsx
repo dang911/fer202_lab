@@ -11,6 +11,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ShoppingBag, Star } from "lucide-react";
+import Link from "next/link";
+import { FavoriteButton } from "@/components/FavoriteButton";
 
 interface ProductCardProps {
   product: Product;
@@ -40,6 +42,9 @@ export function ProductCard({ product }: ProductCardProps) {
               {product.category}
             </Badge>
           )}
+          <div className="absolute right-3 top-3">
+            <FavoriteButton productId={product.id} />
+          </div>
           {product.rating && (
             <div className="absolute top-3 right-3 flex items-center gap-1 rounded-full bg-slate-800/90 px-2 py-0.5 text-xs text-amber-300 border border-slate-700/60">
               <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
@@ -54,7 +59,7 @@ export function ProductCard({ product }: ProductCardProps) {
             data-testid="product-name"
             className="text-lg font-bold text-slate-100 transition-colors group-hover:text-indigo-400 line-clamp-1"
           >
-            {product.name}
+            <Link href={`/products/${product.id}`} data-testid="link-detail">{product.name}</Link>
           </CardTitle>
           <CardDescription
             data-testid="product-description"
@@ -73,7 +78,7 @@ export function ProductCard({ product }: ProductCardProps) {
             data-testid="product-price"
             className="text-lg font-extrabold text-indigo-400 tracking-tight"
           >
-            {product.price}
+            ${product.price.toFixed(2)}
           </span>
         </div>
         <Button
