@@ -6,6 +6,9 @@ import { ArrowLeft } from "lucide-react";
 import { products } from "@/data/products";
 import { Header } from "@/components/Header";
 import { FavoriteButton } from "@/components/FavoriteButton";
+import { getReviewsForProduct } from "@/lib/reviews";
+import { ReviewsProvider } from "@/contexts/ReviewsContext";
+import { ReviewsSection } from "@/components/ReviewsSection";
 
 interface ProductPageProps {
   params: { id: string };
@@ -27,9 +30,11 @@ export function generateMetadata({ params }: ProductPageProps): Metadata {
   return { title: product ? `${product.name} | TechPulse` : "Product Not Found | TechPulse" };
 }
 
-export default function ProductDetailPage({ params }: ProductPageProps) {
+export default async function ProductDetailPage({ params }: ProductPageProps) {
   const product = findProduct(params.id);
   if (!product) notFound();
+
+  const { reviews } = await getReviewsForProduct(product.id);
 
   return (
     <div className="ambient-bg min-h-screen">
@@ -50,6 +55,10 @@ export default function ProductDetailPage({ params }: ProductPageProps) {
             <FavoriteButton productId={product.id} />
           </div>
         </article>
+
+        <ReviewsProvider productId={product.id} initialReviews={reviews}>
+          <ReviewsSection productId={product.id} />
+        </ReviewsProvider>
       </main>
     </div>
   );
